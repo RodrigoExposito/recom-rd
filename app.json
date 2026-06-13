@@ -22,6 +22,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c643e57d-dcd1-4dc0-9b38-0baf604577de"
+      }
+    },
+    "owner": "rodri-expo"
   }
 }
