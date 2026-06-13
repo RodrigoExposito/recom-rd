@@ -8,6 +8,9 @@ export interface WorkoutExercise {
   restSeconds: number;
   orderIndex: number;
   notes?: string;
+  description?: string;
+  gifUrl?: string;
+  targetMuscles?: string[];
 }
 
 export interface WorkoutDay {

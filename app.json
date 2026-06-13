@@ -17,7 +17,8 @@
         {
           "color": "#4CAF50"
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true

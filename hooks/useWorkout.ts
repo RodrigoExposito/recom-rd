@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { WorkoutDay, SetInput, WorkoutLog } from '@/types';
-import { getWorkoutForDay, getWorkoutById, getTodayDayOfWeek } from '@/data/lueth-program';
+import { getWorkoutForDay, getWorkoutById, getTodayDayOfWeek, getDayOfWeekForDate } from '@/data/lueth-program';
 import {
   getWorkoutLogForDate,
   createWorkoutLog,
@@ -110,4 +110,27 @@ export function useActiveWorkout(workoutId: string) {
   }, [workoutLogId, sets, startTime]);
 
   return { workout, sets, updateSet, completeWorkout, isCompleted };
+}
+
+// ─── Workout for any date (date navigation) ──────────────────────────────────
+
+export function useWorkoutForDate(date: Date) {
+  const [workout, setWorkout] = useState<WorkoutDay | null>(null);
+  const [workoutLog, setWorkoutLog] = useState<WorkoutLog | null>(null);
+
+  useEffect(() => {
+    const dayOfWeek = getDayOfWeekForDate(date);
+    const dayWorkout = getWorkoutForDay(dayOfWeek) ?? null;
+    setWorkout(dayWorkout);
+
+    if (dayWorkout) {
+      const dateStr = date.toISOString().split('T')[0];
+      const log = getWorkoutLogForDate(dayWorkout.id, dateStr);
+      setWorkoutLog(log);
+    } else {
+      setWorkoutLog(null);
+    }
+  }, [date]);
+
+  return { workout, workoutLog };
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Text, IconButton } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { WorkoutExercise, SetInput, SetLog } from '@/types';
 import { SetRow } from './SetRow';
@@ -10,9 +10,10 @@ interface Props {
   sets: SetInput[];
   previousSets: SetLog[];
   onSetChange: (setIndex: number, updates: Partial<SetInput>) => void;
+  onViewDetails?: (exercise: WorkoutExercise) => void;
 }
 
-export function ExerciseCard({ exercise, sets, previousSets, onSetChange }: Props) {
+export function ExerciseCard({ exercise, sets, previousSets, onSetChange, onViewDetails }: Props) {
   const [expanded, setExpanded] = useState(true);
   const completedCount = sets.filter((s) => s.completed).length;
 
@@ -29,6 +30,14 @@ export function ExerciseCard({ exercise, sets, previousSets, onSetChange }: Prop
           <Text style={styles.progress}>
             {completedCount}/{exercise.setsTarget}
           </Text>
+          {onViewDetails && (
+            <IconButton
+              icon="information-outline"
+              size={20}
+              iconColor="#888"
+              onPress={() => onViewDetails(exercise)}
+            />
+          )}
           <MaterialCommunityIcons
             name={expanded ? 'chevron-up' : 'chevron-down'}
             size={20}
@@ -75,7 +84,7 @@ const styles = StyleSheet.create({
     padding: 14,
   },
   headerLeft: { flex: 1 },
-  headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  headerRight: { flexDirection: 'row', alignItems: 'center', gap: 2 },
   name: { color: '#fff', fontSize: 15, fontWeight: '700' },
   meta: { color: '#888', fontSize: 12, marginTop: 2 },
   progress: { color: '#4CAF50', fontSize: 14, fontWeight: '700' },

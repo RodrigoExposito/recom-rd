@@ -16,16 +16,15 @@ const theme = {
   },
 };
 
+// Initialize DB immediately at module load time, not in useEffect
+initDatabase();
+
 function RootInitializer() {
   useNotifications();
   return null;
 }
 
 export default function RootLayout() {
-  useEffect(() => {
-    initDatabase();
-  }, []);
-
   return (
     <PaperProvider theme={theme}>
       <StatusBar style="light" />

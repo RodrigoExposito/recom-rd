@@ -1,17 +1,19 @@
-import { useCallback } from 'react';
-import { View, StyleSheet, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+import { useCallback, useState } from 'react';
+import { View, StyleSheet, ScrollView, Alert, KeyboardAvoidingView, Platform, Modal } from 'react-native';
+import { Text, Button, IconButton } from 'react-native-paper';
 import { useLocalSearchParams, router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { ExerciseCard } from '@/components/ExerciseCard';
 import { WorkoutHeader } from '@/components/WorkoutHeader';
+import ExerciseDetail from '@/components/ExerciseDetail';
 import { useActiveWorkout } from '@/hooks/useWorkout';
 import { getPreviousSetLogs } from '@/lib/db';
-import { SetInput } from '@/types';
+import { SetInput, WorkoutExercise } from '@/types';
 
 export default function WorkoutScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { workout, sets, updateSet, completeWorkout, isCompleted } = useActiveWorkout(id);
+  const [selectedExercise, setSelectedExercise] = useState<WorkoutExercise | null>(null);
 
   const handleSetChange = useCallback(
     (exerciseId: string, setIndex: number, updates: Partial<SetInput>) => {
@@ -66,6 +68,7 @@ export default function WorkoutScreen() {
               sets={exerciseSets}
               previousSets={previousSets}
               onSetChange={(setIndex, updates) => handleSetChange(exercise.id, setIndex, updates)}
+              onViewDetails={setSelectedExercise}
             />
           );
         })}
@@ -83,6 +86,14 @@ export default function WorkoutScreen() {
         )}
         <View style={styles.spacer} />
       </ScrollView>
+
+      {/* Exercise Detail Modal */}
+      <Modal visible={!!selectedExercise} animationType="slide" transparent={false}>
+        <View style={styles.modalHeader}>
+          <IconButton icon="close" size={28} iconColor="#fff" onPress={() => setSelectedExercise(null)} />
+        </View>
+        {selectedExercise && <ExerciseDetail exercise={selectedExercise} />}
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -99,4 +110,5 @@ const styles = StyleSheet.create({
   completeBtnContent: { paddingVertical: 8 },
   completeBtnLabel: { fontSize: 17, fontWeight: '800', color: '#000' },
   spacer: { height: 24 },
+  modalHeader: { backgroundColor: '#1A1A1A', paddingTop: 12, borderBottomColor: '#2A2A2A', borderBottomWidth: 1 },
 });
