@@ -6,6 +6,10 @@
     "orientation": "portrait",
     "scheme": "fittracker",
     "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "backgroundColor": "#0A0A0A"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.rodri.fittrakerpro"

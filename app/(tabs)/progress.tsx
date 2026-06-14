@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ProgressChart } from '@/components/ProgressChart';
 import { getProgressForExercise } from '@/lib/db';
 import { ProgressDataPoint } from '@/types';
@@ -15,6 +16,7 @@ const TRACKED_EXERCISES = [
 ];
 
 export default function ProgressScreen() {
+  const insets = useSafeAreaInsets();
   const [selectedId, setSelectedId] = useState(TRACKED_EXERCISES[0]?.id ?? '');
   const [data, setData] = useState<ProgressDataPoint[]>([]);
 
@@ -23,15 +25,14 @@ export default function ProgressScreen() {
     setData(getProgressForExercise(exerciseId));
   }, []);
 
-  // Load on first render
-  useState(() => {
+  useEffect(() => {
     if (selectedId) loadData(selectedId);
-  });
+  }, [selectedId, loadData]);
 
   const selectedExercise = TRACKED_EXERCISES.find((e) => e.id === selectedId);
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}>
       <Text style={styles.title}>Progresión de fuerza</Text>
 
       {/* Exercise selector */}
@@ -57,7 +58,7 @@ export default function ProgressScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0A0A0A' },
-  content: { padding: 16, paddingTop: 32, paddingBottom: 40 },
+  content: { padding: 16, paddingBottom: 40 },
   title: { color: '#fff', fontSize: 22, fontWeight: '800', marginBottom: 20, textAlign: 'center' },
   chipRow: { gap: 8, paddingBottom: 16, paddingHorizontal: 4 },
   chip: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20, backgroundColor: '#1A1A1A', borderWidth: 1, borderColor: '#333' },

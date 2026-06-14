@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, Button, IconButton } from 'react-native-paper';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useWorkoutForDate } from '@/hooks/useWorkout';
 
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets();
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const { workout, workoutLog } = useWorkoutForDate(selectedDate);
 
@@ -29,7 +31,7 @@ export default function HomeScreen() {
 
   if (!workout) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.dateNav}>
           <IconButton icon="chevron-left" onPress={goToPrevDay} size={28} />
           <Text style={styles.dateText}>{dateStr}</Text>
@@ -51,7 +53,7 @@ export default function HomeScreen() {
 
   if (workoutLog?.completed) {
     return (
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: insets.top + 8 }]}>
         <View style={styles.dateNav}>
           <IconButton icon="chevron-left" onPress={goToPrevDay} size={28} />
           <Text style={styles.dateText}>{dateStr}</Text>
@@ -76,7 +78,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: insets.top + 8 }]}>
       <View style={styles.dateNav}>
         <IconButton icon="chevron-left" onPress={goToPrevDay} size={28} />
         <Text style={styles.dateText}>{dateStr}</Text>

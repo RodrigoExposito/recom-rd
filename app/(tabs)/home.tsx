@@ -1,5 +1,6 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, ProgressBar, Card } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useHomeStats } from '@/hooks/useHomeStats';
 
 const ACCENT = '#4CAF50';
@@ -7,13 +8,14 @@ const BG = '#0A0A0A';
 const SECONDARY_BG = '#1A1A1A';
 
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets();
   const { weekWorkouts, completedThisWeek, totalWorkoutsThisWeek, volumeThisMonth, nextWorkout } = useHomeStats();
 
   const weekPct = totalWorkoutsThisWeek > 0 ? Math.round((completedThisWeek / totalWorkoutsThisWeek) * 100) : 0;
   const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}>
       {/* Welcome */}
       <Text style={styles.greeting}>Bienvenido, Rodri</Text>
       <Text style={styles.subGreeting}>Tu progreso esta semana</Text>
@@ -75,7 +77,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: BG },
-  content: { padding: 20, paddingBottom: 100 },
+  content: { padding: 20, paddingBottom: 100, paddingTop: 0 },
   greeting: { color: '#fff', fontSize: 28, fontWeight: '800', marginBottom: 4 },
   subGreeting: { color: '#888', fontSize: 15, marginBottom: 20 },
   card: { backgroundColor: SECONDARY_BG, borderRadius: 12, marginBottom: 20, borderColor: '#2A2A2A', borderWidth: 1 },

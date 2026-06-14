@@ -27,13 +27,14 @@ NO tiene backend, NO tiene autenticación, NO tiene nube.
 npx expo start                                          # Dev server
 npx expo start --ios                                    # Simulador iOS
 npx tsc --noEmit                                        # Type-check
-eas build --profile development --platform ios          # Build para iPhone
+npx expo run:ios --device                              # Build local + instalar en iPhone físico (cuenta Apple gratuita)
+npx expo run:ios                                        # Build local para simulador
 ```
 
 ## Architecture
 
 - Expo Router: todas las pantallas en /app
-- Tabs: /app/(tabs)/ — 4 tabs: index, calendar, nutrition, progress
+- Tabs: /app/(tabs)/ — 5 tabs: home (Inicio), index (Entreno), calendar, nutrition, progress
 - Workout activo: /app/workout/[id].tsx
 - Componentes reutilizables en /components
 - Base de datos y queries en /lib/db.ts
@@ -90,10 +91,18 @@ db.runSync('INSERT INTO ...', [params]);
 - 00:00 — Pre-sueño (30g P | 20g C | 5g F)
 
 ## Current Phase
-Phase A: Project Setup + Data Layer — IN PROGRESS
+COMPLETED — todas las fases entregadas.
 
 ## Completed Phases
-(none yet)
+- Phase A: Project Setup + Data Layer
+- Phase B: Database + Shell de la App
+- Phase C: Workout del Día + Logging (CORE)
+- Phase D: Calendario Semanal
+- Phase E: Suplementos + Comidas + Notificaciones
+- Phase F: Dashboard de Progresión
+- Phase G: Polish + Build para iPhone
 
 ## Known Issues
-(none yet)
+- assets/icon.png no existe aún — necesario antes del build. Crear una imagen 1024×1024 PNG y copiarla a /assets/icon.png.
+- Se agregó un 5to tab "home" (Inicio) con stats semanales — no estaba en el plan original pero es una mejora válida.
+- Certificado gratuito vence cada 7 días, rebuildar con `npx expo run:ios --device --configuration Release`.

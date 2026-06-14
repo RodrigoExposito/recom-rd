@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
 import { WeekCalendar } from '@/components/WeekCalendar';
 import { getWorkoutLogsForWeek, getSetting, setSetting, getTodayString } from '@/lib/db';
@@ -40,6 +41,7 @@ function getCurrentWeekNumber(): number {
 }
 
 export default function CalendarScreen() {
+  const insets = useSafeAreaInsets();
   const [weekLogs, setWeekLogs] = useState<WorkoutLog[]>([]);
   const [weekNumber, setWeekNumber] = useState(1);
   const [mondayStr, setMondayStr] = useState('');
@@ -57,7 +59,7 @@ export default function CalendarScreen() {
   useFocusEffect(useCallback(() => { load(); }, [load]));
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}>
       <Text style={styles.title}>Esta semana</Text>
       <WeekCalendar weekLogs={weekLogs} weekStartDate={mondayStr} weekNumber={weekNumber} />
 
@@ -75,7 +77,7 @@ export default function CalendarScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0A0A0A' },
-  content: { padding: 20, paddingTop: 32, paddingBottom: 40 },
+  content: { padding: 20, paddingBottom: 40 },
   title: { color: '#fff', fontSize: 22, fontWeight: '800', marginBottom: 20, textAlign: 'center' },
   legend: { marginTop: 24, backgroundColor: '#1A1A1A', borderRadius: 12, padding: 16 },
   legendTitle: { color: '#4CAF50', fontSize: 14, fontWeight: '700', marginBottom: 8 },

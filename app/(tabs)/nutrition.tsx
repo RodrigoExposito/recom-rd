@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from 'expo-router';
 import { SupplementItem } from '@/components/SupplementItem';
 import { MealItem } from '@/components/MealItem';
@@ -22,6 +23,7 @@ function ensureLogsForToday(date: string) {
 }
 
 export default function NutritionScreen() {
+  const insets = useSafeAreaInsets();
   const [suppLogs, setSuppLogs] = useState<SupplementLog[]>([]);
   const [mealLogs, setMealLogs] = useState<MealLog[]>([]);
 
@@ -49,7 +51,7 @@ export default function NutritionScreen() {
   const mealsDone = mealLogs.filter((m) => m.completed).length;
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}>
       <Text style={styles.title}>Nutrición de hoy</Text>
 
       {/* Supplements */}
@@ -98,7 +100,7 @@ function MacroBox({ label, value, color }: { label: string; value: string; color
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0A0A0A' },
-  content: { padding: 20, paddingTop: 32, paddingBottom: 40 },
+  content: { padding: 20, paddingBottom: 40 },
   title: { color: '#fff', fontSize: 22, fontWeight: '800', marginBottom: 24, textAlign: 'center' },
   section: { marginBottom: 24 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
